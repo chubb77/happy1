@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: transparent; /* ✅ 투명 배경 */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -24,10 +24,10 @@
         .container {
             width: 100%;
             max-width: 1280px;
-            background-color: white;
+            background-color: transparent; /* ✅ 컨테이너도 투명 */
             padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: none; /* ✅ 그림자 제거 */
         }
 
         /* Main Carousel */
@@ -70,7 +70,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.1); /* ✅ 화살표 배경 어둡게 */
             backdrop-filter: blur(8px);
             border: none;
             cursor: pointer;
@@ -82,7 +82,7 @@
         }
 
         .nav-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         .nav-button:disabled {
@@ -101,7 +101,7 @@
         .nav-button svg {
             width: 24px;
             height: 24px;
-            stroke: white;
+            stroke: black; /* ✅ 화살표 색 검정으로 변경 */
             stroke-width: 2;
             fill: none;
         }
@@ -121,7 +121,7 @@
             width: 8px;
             height: 8px;
             border-radius: 9999px;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(0, 0, 0, 0.5); /* ✅ 검정 느낌으로 보정 */
             border: none;
             cursor: pointer;
             transition: all 0.3s;
@@ -129,11 +129,11 @@
         }
 
         .dot:hover {
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(0, 0, 0, 0.7);
         }
 
         .dot.active {
-            background-color: white;
+            background-color: black;
             width: 32px;
         }
 
@@ -150,17 +150,17 @@
         }
 
         .thumbnail-carousel::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 3px;
         }
 
         .thumbnail-carousel::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 3px;
         }
 
         .thumbnail-carousel::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.5);
         }
 
         .thumbnail {
@@ -182,7 +182,7 @@
 
         .thumbnail.active {
             opacity: 1;
-            border-color: white;
+            border-color: black; /* ✅ 강조색 변경 */
             transform: scale(1.05);
         }
 
@@ -244,56 +244,16 @@
     <script>
         // 이미지 데이터
         const slides = [
-            {
-                id: 1,
-                image: './images/1.png',
-                title: 'Image 1'
-            },
-            {
-                id: 2,
-                image: './images/2.png',
-                title: 'Image 2'
-            },
-            {
-                id: 3,
-                image: './images/3.png',
-                title: 'Image 3'
-            },
-            {
-                id: 4,
-                image: './images/4.png',
-                title: 'Image 4'
-            },
-            {
-                id: 5,
-                image: './images/5.png',
-                title: 'Image 5'
-            },
-            {
-                id: 6,
-                image: './images/6.png',
-                title: 'Image 6'
-            },
-            {
-                id: 7,
-                image: './images/7.png',
-                title: 'Image 7'
-            },
-            {
-                id: 8,
-                image: './images/8.png',
-                title: 'Image 8'
-            },
-            {
-                id: 9,
-                image: './images/9.png',
-                title: 'Image 9'
-            },
-            {
-                id: 10,
-                image: './images/10.png',
-                title: 'Image 10'
-            }
+            { id: 1, image: './images/1.png', title: 'Image 1' },
+            { id: 2, image: './images/2.png', title: 'Image 2' },
+            { id: 3, image: './images/3.png', title: 'Image 3' },
+            { id: 4, image: './images/4.png', title: 'Image 4' },
+            { id: 5, image: './images/5.png', title: 'Image 5' },
+            { id: 6, image: './images/6.png', title: 'Image 6' },
+            { id: 7, image: './images/7.png', title: 'Image 7' },
+            { id: 8, image: './images/8.png', title: 'Image 8' },
+            { id: 9, image: './images/9.png', title: 'Image 9' },
+            { id: 10, image: './images/10.png', title: 'Image 10' }
         ];
 
         let currentSlide = 0;
@@ -400,4 +360,5 @@
     </script>
 </body>
 </html>
+
 
