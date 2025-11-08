@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Carousel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Main Carousel */
+        .main-carousel {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .main-carousel-inner {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Navigation Arrows */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            transition: background-color 0.2s;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-button.prev {
+            left: 1rem;
+        }
+
+        .nav-button.next {
+            right: 1rem;
+        }
+
+        .nav-button svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Dot Indicators */
+        .dots {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+
+        .dot:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .dot.active {
+            background-color: white;
+            width: 32px;
+        }
+
+        /* Thumbnail Carousel */
+        .thumbnail-carousel {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .thumbnail-carousel::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .thumbnail-carousel::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .thumbnail-carousel::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .thumbnail-carousel::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .thumbnail {
+            position: relative;
+            flex-shrink: 0;
+            width: 192px;
+            aspect-ratio: 16 / 9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail:hover {
+            opacity: 0.8;
+        }
+
+        .thumbnail.active {
+            opacity: 1;
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .thumbnail {
+                width: 120px;
+            }
+
+            .nav-button {
+                width: 32px;
+                height: 32px;
+            }
+
+            .nav-button svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Carousel -->
+        <div class="main-carousel">
+            <div class="main-carousel-inner">
+                <!-- Slides will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button class="nav-button prev" onclick="prevSlide()" aria-label="Previous slide">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <button class="nav-button next" onclick="nextSlide()" aria-label="Next slide">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+
+            <!-- Dot Indicators -->
+            <div class="dots"></div>
+        </div>
+
+        <!-- Thumbnail Carousel -->
+        <div class="thumbnail-carousel"></div>
+    </div>
+
+    <script>
+        // 이미지 데이터
+        const slides = [
+            {
+                id: 1,
+                image: './images/1.jpg',
+                title: 'Image 1'
+            },
+            {
+                id: 2,
+                image: './images/2.jpg',
+                title: 'Image 2'
+            },
+            {
+                id: 3,
+                image: './images/3.jpg',
+                title: 'Image 3'
+            },
+            {
+                id: 4,
+                image: './images/4.jpg',
+                title: 'Image 4'
+            },
+            {
+                id: 5,
+                image: './images/5.jpg',
+                title: 'Image 5'
+            },
+            {
+                id: 6,
+                image: './images/6.jpg',
+                title: 'Image 6'
+            },
+            {
+                id: 7,
+                image: './images/7.jpg',
+                title: 'Image 7'
+            },
+            {
+                id: 8,
+                image: './images/8.jpg',
+                title: 'Image 8'
+            },
+            {
+                id: 9,
+                image: './images/9.jpg',
+                title: 'Image 9'
+            },
+            {
+                id: 10,
+                image: './images/10.jpg',
+                title: 'Image 10'
+            }
+        ];
+
+        let currentSlide = 0;
+        let isTransitioning = false;
+
+        // Initialize carousel
+        function init() {
+            const mainCarouselInner = document.querySelector('.main-carousel-inner');
+            const dotsContainer = document.querySelector('.dots');
+            const thumbnailCarousel = document.querySelector('.thumbnail-carousel');
+
+            // Create main slides
+            slides.forEach((slide, index) => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = `slide ${index === 0 ? 'active' : ''}`;
+                slideDiv.innerHTML = `<img src="${slide.image}" alt="${slide.title}">`;
+                mainCarouselInner.appendChild(slideDiv);
+            });
+
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `dot ${index === 0 ? 'active' : ''}`;
+                dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+                dot.onclick = () => goToSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+
+            // Create thumbnails
+            slides.forEach((slide, index) => {
+                const thumbnail = document.createElement('div');
+                thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+                thumbnail.innerHTML = `<img src="${slide.image}" alt="Thumbnail ${index + 1}">`;
+                thumbnail.onclick = () => goToSlide(index);
+                thumbnailCarousel.appendChild(thumbnail);
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            });
+        }
+
+        function updateCarousel() {
+            const slideElements = document.querySelectorAll('.slide');
+            const dotElements = document.querySelectorAll('.dot');
+            const thumbnailElements = document.querySelectorAll('.thumbnail');
+
+            slideElements.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+
+            dotElements.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            thumbnailElements.forEach((thumbnail, index) => {
+                thumbnail.classList.toggle('active', index === currentSlide);
+            });
+
+            // Scroll thumbnail into view
+            if (thumbnailElements[currentSlide]) {
+                thumbnailElements[currentSlide].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
+        }
+
+        function goToSlide(index) {
+            if (isTransitioning || index === currentSlide) return;
+            isTransitioning = true;
+            currentSlide = index;
+            updateCarousel();
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 500);
+        }
+
+        function prevSlide() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+            updateCarousel();
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 500);
+        }
+
+        function nextSlide() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            currentSlide = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+            updateCarousel();
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 500);
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
